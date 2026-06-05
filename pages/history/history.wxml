@@ -2,9 +2,9 @@
   <!-- 筛选栏 -->
   <view class="filter-bar">
     <view class="sub-tabs">
-      <view class="sub-tab {{tab === 'in' ? 'active' : ''}}" bindtap="switchTab" data-tab="in">📥 入库</view>
-      <view class="sub-tab {{tab === 'prod' ? 'active' : ''}}" bindtap="switchTab" data-tab="prod">⚙️ 生产</view>
-      <view class="sub-tab {{tab === 'out' ? 'active' : ''}}" bindtap="switchTab" data-tab="out">📤 出货</view>
+      <view class="sub-tab {{tab === 'in' ? 'active' : ''}}" bindtap="switchTab" data-tab="in">入库</view>
+      <view class="sub-tab {{tab === 'prod' ? 'active' : ''}}" bindtap="switchTab" data-tab="prod">生产</view>
+      <view class="sub-tab {{tab === 'out' ? 'active' : ''}}" bindtap="switchTab" data-tab="out">出货</view>
     </view>
     <view class="date-filter">
       <picker mode="date" value="{{startDate}}" bindchange="onStartDate">
@@ -31,7 +31,7 @@
       <text class="day-total">共{{item.dayTotal}}双</text>
     </view>
     <view wx:for="{{item.models}}" wx:for-item="model" wx:key="name" class="card">
-      <view class="card-title">👟 {{model.name}}</view>
+      <view class="card-title">{{model.name}}</view>
       <view wx:if="{{tab === 'in'}}" class="total-bar">
         <text class="tb-item c-blue">MD {{model.midTotal}}</text>
         <text class="tb-item c-green">RB {{model.outTotal}}</text>

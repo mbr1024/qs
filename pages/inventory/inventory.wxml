@@ -6,7 +6,7 @@
       <text class="total-tag">MD {{item.midTotal}}  RB {{item.outTotal}}  成品 {{item.prodTotal}}</text>
     </view>
     <view class="inv-section" wx:if="{{item.midsole.length > 0}}">
-      <text class="inv-label c-blue">🧱 MD</text>
+      <text class="inv-label c-blue">MD</text>
       <view class="size-grid">
         <view wx:for="{{item.midsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
           <text class="sc-size">{{sz.size}}</text>
@@ -15,7 +15,7 @@
       </view>
     </view>
     <view class="inv-section" wx:if="{{item.outsole.length > 0}}">
-      <text class="inv-label c-green">👟 RB</text>
+      <text class="inv-label c-green">RB</text>
       <view class="size-grid">
         <view wx:for="{{item.outsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
           <text class="sc-size">{{sz.size}}</text>
@@ -24,7 +24,7 @@
       </view>
     </view>
     <view class="inv-section" wx:if="{{item.product.length > 0}}">
-      <text class="inv-label c-purple">📦 成品</text>
+      <text class="inv-label c-purple">成品</text>
       <view class="size-grid">
         <view wx:for="{{item.product}}" wx:for-item="sz" wx:key="size" class="size-cell">
           <text class="sc-size">{{sz.size}}</text>

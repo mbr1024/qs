@@ -1,8 +1,8 @@
 <view class="container">
-  <view class="section-label">📊 今日运营</view>
+  <view class="section-label">今日运营</view>
   <view class="metrics">
     <view class="metric-card">
-      <view class="mc-header mc-blue">📥 入库</view>
+      <view class="mc-header mc-blue">入库</view>
       <view class="metric-val">{{d.today_in}}</view>
       <view class="metric-detail">
         <text class="md-item"><text class="dot dot-blue"></text>MD {{d.today_in_mid}}</text>
@@ -10,38 +10,38 @@
       </view>
     </view>
     <view class="metric-card">
-      <view class="mc-header mc-purple">⚙️ 生产</view>
+      <view class="mc-header mc-purple">生产</view>
       <view class="metric-val">{{d.today_production}}</view>
       <view class="metric-detail" wx:if="{{d.today_defects > 0}}">
         <text class="md-item md-warn">不良 {{d.today_defects}}</text>
       </view>
     </view>
     <view class="metric-card">
-      <view class="mc-header mc-orange">📤 出货</view>
+      <view class="mc-header mc-orange">出货</view>
       <view class="metric-val">{{d.today_shipment}}</view>
     </view>
   </view>
 
   <!-- 当前库存 -->
-  <view class="section-label">📈 当前库存</view>
+  <view class="section-label">当前库存</view>
   <view class="metrics">
     <view class="metric-card">
-      <view class="mc-header mc-blue">🧱 MD</view>
+      <view class="mc-header mc-blue">MD</view>
       <view class="metric-val">{{d.stock_mid}}</view>
     </view>
     <view class="metric-card">
-      <view class="mc-header mc-green">👟 RB</view>
+      <view class="mc-header mc-green">RB</view>
       <view class="metric-val">{{d.stock_out}}</view>
     </view>
     <view class="metric-card">
-      <view class="mc-header mc-purple">📦 成品</view>
+      <view class="mc-header mc-purple">成品</view>
       <view class="metric-val">{{d.stock_product}}</view>
     </view>
   </view>
 
   <!-- 入库明细 -->
   <view class="card">
-    <view class="card-title">📥 入库明细</view>
+    <view class="card-title">入库明细</view>
     <view wx:if="{{d.inDetail.length > 0}}" class="data-table">
       <view class="dt-header">
         <text class="dt-col dt-name">鞋款</text>
@@ -61,7 +61,7 @@
 
   <!-- 生产明细 -->
   <view class="card">
-    <view class="card-title">⚙️ 生产明细</view>
+    <view class="card-title">生产明细</view>
     <view wx:if="{{d.prodDetail.length > 0}}" class="data-table">
       <view class="dt-header">
         <text class="dt-col dt-name">鞋款</text>
@@ -79,7 +79,7 @@
 
   <!-- 出货明细 -->
   <view class="card">
-    <view class="card-title">📤 出货明细</view>
+    <view class="card-title">出货明细</view>
     <view wx:if="{{d.outDetail.length > 0}}" class="data-table">
       <view class="dt-header">
         <text class="dt-col dt-name">鞋款</text>
@@ -95,7 +95,7 @@
 
   <!-- 成品库存 -->
   <view class="card">
-    <view class="card-title">📦 成品库存</view>
+    <view class="card-title">成品库存</view>
     <view wx:if="{{d.prodStock.length > 0}}" class="data-table">
       <view class="dt-header">
         <text class="dt-col dt-name">鞋款</text>

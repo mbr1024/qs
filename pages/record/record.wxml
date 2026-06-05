@@ -1,9 +1,9 @@
 <view class="container">
   <!-- Tab -->
   <view class="record-tabs">
-    <view class="rtab {{recordTab === 'in' ? 'active' : ''}}" bindtap="switchRecordTab" data-tab="in">📥 入库</view>
-    <view class="rtab {{recordTab === 'prod' ? 'active' : ''}}" bindtap="switchRecordTab" data-tab="prod">⚙️ 生产</view>
-    <view class="rtab {{recordTab === 'out' ? 'active' : ''}}" bindtap="switchRecordTab" data-tab="out">📤 出货</view>
+    <view class="rtab {{recordTab === 'in' ? 'active' : ''}}" bindtap="switchRecordTab" data-tab="in">入库</view>
+    <view class="rtab {{recordTab === 'prod' ? 'active' : ''}}" bindtap="switchRecordTab" data-tab="prod">生产</view>
+    <view class="rtab {{recordTab === 'out' ? 'active' : ''}}" bindtap="switchRecordTab" data-tab="out">出货</view>
   </view>
 
   <!-- 日期筛选 -->
@@ -32,7 +32,7 @@
     <!-- 入库：MD / RB -->
     <block wx:if="{{recordTab === 'in'}}">
       <view wx:if="{{item.midsole.length > 0}}" class="inv-section">
-        <text class="inv-label c-blue">🧱 MD</text>
+        <text class="inv-label c-blue">MD</text>
         <view class="size-grid">
           <view wx:for="{{item.midsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
             <text class="sc-size">{{sz.size}}</text>
@@ -41,7 +41,7 @@
         </view>
       </view>
       <view wx:if="{{item.outsole.length > 0}}" class="inv-section">
-        <text class="inv-label c-green">👟 RB</text>
+        <text class="inv-label c-green">RB</text>
         <view class="size-grid">
           <view wx:for="{{item.outsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
             <text class="sc-size">{{sz.size}}</text>
@@ -53,7 +53,7 @@
     <!-- 生产 -->
     <block wx:elif="{{recordTab === 'prod'}}">
       <view class="inv-section">
-        <text class="inv-label">⚙️ 完成</text>
+        <text class="inv-label">完成</text>
         <view class="size-grid">
           <view wx:for="{{item.sizes}}" wx:for-item="sz" wx:key="size" class="size-cell">
             <text class="sc-size">{{sz.size}}</text>
@@ -66,7 +66,7 @@
     <!-- 出货 -->
     <block wx:else>
       <view class="inv-section">
-        <text class="inv-label">📤 出货</text>
+        <text class="inv-label">出货</text>
         <view class="size-grid">
           <view wx:for="{{item.sizes}}" wx:for-item="sz" wx:key="size" class="size-cell">
             <text class="sc-size">{{sz.size}}</text>
@@ -90,7 +90,7 @@
         </view>
         <block wx:if="{{recordTab === 'in'}}">
           <view wx:if="{{g.midsole.length > 0}}" class="inv-section">
-            <text class="inv-label c-blue">🧱 MD</text>
+            <text class="inv-label c-blue">MD</text>
             <view class="size-grid">
               <view wx:for="{{g.midsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
                 <text class="sc-size">{{sz.size}}</text>
@@ -99,7 +99,7 @@
             </view>
           </view>
           <view wx:if="{{g.outsole.length > 0}}" class="inv-section">
-            <text class="inv-label c-green">👟 RB</text>
+            <text class="inv-label c-green">RB</text>
             <view class="size-grid">
               <view wx:for="{{g.outsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
                 <text class="sc-size">{{sz.size}}</text>
@@ -160,7 +160,7 @@
     <view wx:if="{{formType !== ''}}" class="sheet-form">
       <view class="sheet-header">
         <view class="back-btn" bindtap="selectType" data-type=""><text class="back-arrow">←</text></view>
-        <text class="sheet-title">{{formType === 'in' ? '📥 入库' : formType === 'prod' ? '⚙️ 生产' : '📤 出货'}}</text>
+        <text class="sheet-title">{{formType === 'in' ? '入库' : formType === 'prod' ? '生产' : '出货'}}</text>
         <view class="close-btn" bindtap="closeForm">✕</view>
       </view>
       <view class="form-meta">

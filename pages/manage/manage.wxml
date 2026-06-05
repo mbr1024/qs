@@ -1,9 +1,9 @@
 <view class="container">
-  <!-- ➕ 添加鞋款 -->
+  <!-- 添加鞋款 -->
   <view class="card">
     <view class="add-row">
       <input class="add-input" placeholder="输入新鞋款名称" value="{{newName}}" bindinput="onNewName" />
-      <view class="add-btn" bindtap="addModel">➕ 添加</view>
+      <view class="add-btn" bindtap="addModel">添加</view>
     </view>
   </view>
 
@@ -17,8 +17,8 @@
         <input wx:else class="edit-input" value="{{item.name}}" bindinput="onEditName" bindblur="saveEdit" bindconfirm="saveEdit" focus="{{editingId === item.id}}" />
       </view>
       <view class="model-actions">
-        <view class="btn-edit" catchtap="startEdit" data-id="{{item.id}}" data-name="{{item.name}}">✏️ 编辑</view>
-        <view class="btn-disable" catchtap="disableModel" data-id="{{item.id}}">🚫 禁用</view>
+        <view class="btn-edit" catchtap="startEdit" data-id="{{item.id}}" data-name="{{item.name}}">编辑</view>
+        <view class="btn-disable" catchtap="disableModel" data-id="{{item.id}}">禁用</view>
       </view>
     </view>
   </view>
@@ -33,7 +33,7 @@
         <view class="model-name disabled-text">{{item.name}}</view>
       </view>
       <view class="model-actions">
-        <view class="btn-enable" catchtap="enableModel" data-id="{{item.id}}">✅ 启用</view>
+        <view class="btn-enable" catchtap="enableModel" data-id="{{item.id}}">启用</view>
       </view>
     </view>
   </view>
