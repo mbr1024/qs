@@ -14,15 +14,9 @@
 
 /* 日期筛选 */
 .filter-bar {
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center; justify-content: flex-end;
   margin-bottom: 16rpx; padding: 0 4rpx;
 }
-.quick-dates { display: flex; gap: 12rpx; }
-.qd {
-  font-size: 24rpx; color: #999; background: #f5f5f5;
-  padding: 6rpx 16rpx; border-radius: 6rpx;
-}
-.qd.active { color: #1890ff; background: #e6f7ff; font-weight: 500; }
 .date-range { display: flex; align-items: center; gap: 8rpx; }
 .dr-btn {
   font-size: 24rpx; color: #666; background: #f5f5f5;

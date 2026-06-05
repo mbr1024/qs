@@ -8,11 +8,6 @@
 
   <!-- 日期筛选 -->
   <view class="filter-bar">
-    <view class="quick-dates">
-      <text class="qd {{isToday ? 'active' : ''}}" bindtap="setToday">今日</text>
-      <text class="qd" bindtap="setThisMonth">本月</text>
-      <text class="qd" bindtap="setLastMonth">上月</text>
-    </view>
     <view class="date-range">
       <picker mode="date" value="{{dateStart}}" bindchange="onStartDate">
         <text class="dr-btn">{{dateStart}}</text>

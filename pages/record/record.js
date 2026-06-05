@@ -13,7 +13,9 @@ Page({
 
   onShow: function() {
     var today = util.today();
-    this.setData({ dateStart: today, dateEnd: today, isToday: true });
+    var d = new Date(); d.setDate(d.getDate() - 29);
+    var start = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    this.setData({ dateStart: start, dateEnd: today, isToday: false });
     var that = this;
     this.loadModels(function() {
       that.loadRecords();
@@ -39,32 +41,6 @@ Page({
   },
 
   // ========== 日期筛选 ==========
-  setToday: function() {
-    var today = util.today();
-    this.setData({ dateStart: today, dateEnd: today, isToday: true });
-    this.loadRecords();
-  },
-
-  setThisMonth: function() {
-    var now = new Date();
-    var y = now.getFullYear(), m = now.getMonth();
-    var first = y + '-' + String(m+1).padStart(2,'0') + '-01';
-    var today = util.today();
-    this.setData({ dateStart: first, dateEnd: today, isToday: false });
-    this.loadRecords();
-  },
-
-  setLastMonth: function() {
-    var now = new Date();
-    var y = now.getFullYear(), m = now.getMonth();
-    if (m === 0) { y--; m = 11; } else { m--; }
-    var first = y + '-' + String(m+1).padStart(2,'0') + '-01';
-    var lastDay = new Date(y, m+1, 0).getDate();
-    var last = y + '-' + String(m+1).padStart(2,'0') + '-' + String(lastDay).padStart(2,'0');
-    this.setData({ dateStart: first, dateEnd: last, isToday: false });
-    this.loadRecords();
-  },
-
   onStartDate: function(e) {
     this.setData({ dateStart: e.detail.value, isToday: false });
     this.loadRecords();
