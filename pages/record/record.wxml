@@ -1,135 +1,229 @@
 <view class="container">
-  <view class="sub-tabs">
-    <view class="sub-tab {{tab === 'in' ? 'active' : ''}}" bindtap="switchTab" data-tab="in">📥 入库</view>
-    <view class="sub-tab {{tab === 'prod' ? 'active' : ''}}" bindtap="switchTab" data-tab="prod">🏭 生产</view>
-    <view class="sub-tab {{tab === 'out' ? 'active' : ''}}" bindtap="switchTab" data-tab="out">🚚 出货</view>
+  <!-- Tab -->
+  <view class="record-tabs">
+    <view class="rtab {{recordTab === 'in' ? 'active' : ''}}" bindtap="switchRecordTab" data-tab="in">📥 入库</view>
+    <view class="rtab {{recordTab === 'prod' ? 'active' : ''}}" bindtap="switchRecordTab" data-tab="prod">⚙️ 生产</view>
+    <view class="rtab {{recordTab === 'out' ? 'active' : ''}}" bindtap="switchRecordTab" data-tab="out">📤 出货</view>
   </view>
 
-  <!-- 入库 -->
-  <view wx:if="{{tab === 'in'}}">
-    <view class="card">
-      <view class="type-btns">
-        <view class="type-btn {{inType === 0 ? 'active' : ''}}" bindtap="onInType" data-idx="0">中底</view>
-        <view class="type-btn {{inType === 1 ? 'active' : ''}}" bindtap="onInType" data-idx="1">大底</view>
-      </view>
-      <view class="form-row">
-        <view class="form-group">
-          <text class="form-label">供应商</text>
-          <input class="form-input" placeholder="供应商" value="{{inSupplier}}" bindinput="onInSupplier" />
+  <!-- 日期筛选 -->
+  <view class="filter-bar">
+    <view class="quick-dates">
+      <text class="qd {{isToday ? 'active' : ''}}" bindtap="setToday">今日</text>
+      <text class="qd" bindtap="setThisMonth">本月</text>
+      <text class="qd" bindtap="setLastMonth">上月</text>
+    </view>
+    <view class="date-range">
+      <picker mode="date" value="{{dateStart}}" bindchange="onStartDate">
+        <text class="dr-btn">{{dateStart}}</text>
+      </picker>
+      <text class="dr-sep">~</text>
+      <picker mode="date" value="{{dateEnd}}" bindchange="onEndDate">
+        <text class="dr-btn">{{dateEnd}}</text>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 单日记录 -->
+  <view wx:if="{{groups.length === 0 && dateGroups.length === 0}}" class="card"><view class="empty">暂无记录</view></view>
+
+  <view wx:for="{{groups}}" wx:key="name" wx:if="{{groups.length > 0}}" class="card">
+    <view class="card-title">
+      {{item.name}}
+      <text class="total-tag" wx:if="{{recordTab === 'in'}}">MD {{item.mdTotal}}  RB {{item.rbTotal}}  合计 {{item.total}}</text>
+      <text class="total-tag" wx:elif="{{recordTab === 'prod'}}">完成 {{item.total}}{{item.defTotal > 0 ? '  不良 ' : ''}}{{item.defTotal > 0 ? item.defTotal : ''}}</text>
+      <text class="total-tag" wx:else>合计 {{item.total}}</text>
+    </view>
+    <!-- 入库：MD / RB -->
+    <block wx:if="{{recordTab === 'in'}}">
+      <view wx:if="{{item.midsole.length > 0}}" class="inv-section">
+        <text class="inv-label c-blue">🧱 MD</text>
+        <view class="size-grid">
+          <view wx:for="{{item.midsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
+            <text class="sc-size">{{sz.size}}</text>
+            <text class="sc-qty">{{sz.qty}}</text>
+          </view>
         </view>
-        <view class="form-group">
-          <text class="form-label">鞋款</text>
-          <picker range="{{models}}" range-key="name" value="{{inModelIdx}}" bindchange="onInModel">
-            <view class="picker-val">{{inModelIdx >= 0 ? models[inModelIdx].name : '选择鞋款'}}</view>
+      </view>
+      <view wx:if="{{item.outsole.length > 0}}" class="inv-section">
+        <text class="inv-label c-green">👟 RB</text>
+        <view class="size-grid">
+          <view wx:for="{{item.outsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
+            <text class="sc-size">{{sz.size}}</text>
+            <text class="sc-qty c-green">{{sz.qty}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+    <!-- 生产 -->
+    <block wx:elif="{{recordTab === 'prod'}}">
+      <view class="inv-section">
+        <text class="inv-label">⚙️ 完成</text>
+        <view class="size-grid">
+          <view wx:for="{{item.sizes}}" wx:for-item="sz" wx:key="size" class="size-cell">
+            <text class="sc-size">{{sz.size}}</text>
+            <text class="sc-qty">{{sz.qty}}</text>
+            <text wx:if="{{sz.def > 0}}" class="sc-def">不良{{sz.def}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+    <!-- 出货 -->
+    <block wx:else>
+      <view class="inv-section">
+        <text class="inv-label">📤 出货</text>
+        <view class="size-grid">
+          <view wx:for="{{item.sizes}}" wx:for-item="sz" wx:key="size" class="size-cell">
+            <text class="sc-size">{{sz.size}}</text>
+            <text class="sc-qty">{{sz.qty}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 范围记录（按日期分组） -->
+  <view wx:if="{{dateGroups.length > 0}}">
+    <view wx:for="{{dateGroups}}" wx:key="date" class="date-section">
+      <view class="ds-date">{{item.date}}</view>
+      <view wx:for="{{item.groups}}" wx:for-item="g" wx:key="name" class="card">
+        <view class="card-title">
+          {{g.name}}
+          <text class="total-tag" wx:if="{{recordTab === 'in'}}">MD {{g.mdTotal}}  RB {{g.rbTotal}}  合计 {{g.total}}</text>
+          <text class="total-tag" wx:elif="{{recordTab === 'prod'}}">完成 {{g.total}}</text>
+          <text class="total-tag" wx:else>合计 {{g.total}}</text>
+        </view>
+        <block wx:if="{{recordTab === 'in'}}">
+          <view wx:if="{{g.midsole.length > 0}}" class="inv-section">
+            <text class="inv-label c-blue">🧱 MD</text>
+            <view class="size-grid">
+              <view wx:for="{{g.midsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
+                <text class="sc-size">{{sz.size}}</text>
+                <text class="sc-qty">{{sz.qty}}</text>
+              </view>
+            </view>
+          </view>
+          <view wx:if="{{g.outsole.length > 0}}" class="inv-section">
+            <text class="inv-label c-green">👟 RB</text>
+            <view class="size-grid">
+              <view wx:for="{{g.outsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
+                <text class="sc-size">{{sz.size}}</text>
+                <text class="sc-qty c-green">{{sz.qty}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+        <block wx:elif="{{recordTab === 'prod'}}">
+          <view class="inv-section">
+            <view class="size-grid">
+              <view wx:for="{{g.sizes}}" wx:for-item="sz" wx:key="size" class="size-cell">
+                <text class="sc-size">{{sz.size}}</text>
+                <text class="sc-qty">{{sz.qty}}</text>
+                <text wx:if="{{sz.def > 0}}" class="sc-def">不良{{sz.def}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+        <block wx:else>
+          <view class="inv-section">
+            <view class="size-grid">
+              <view wx:for="{{g.sizes}}" wx:for-item="sz" wx:key="size" class="size-cell">
+                <text class="sc-size">{{sz.size}}</text>
+                <text class="sc-qty">{{sz.qty}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部留白 -->
+  <view style="height:140rpx"></view>
+
+  <!-- FAB -->
+  <view class="fab" bindtap="openForm"><text class="fab-icon">+</text></view>
+</view>
+
+<!-- ========== 表单弹窗 ========== -->
+<view wx:if="{{showForm}}" class="overlay" bindtap="closeForm">
+  <view class="sheet" catchtap="preventBubble">
+    <view wx:if="{{formType === ''}}" class="sheet-pick">
+      <view class="sheet-title">选择操作</view>
+      <view class="type-cards">
+        <view class="type-card tc-in" bindtap="selectType" data-type="in">
+          <text class="tc-icon">📥</text><text class="tc-name">入库</text>
+        </view>
+        <view class="type-card tc-prod" bindtap="selectType" data-type="prod">
+          <text class="tc-icon">⚙️</text><text class="tc-name">生产</text>
+        </view>
+        <view class="type-card tc-out" bindtap="selectType" data-type="out">
+          <text class="tc-icon">📤</text><text class="tc-name">出货</text>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{formType !== ''}}" class="sheet-form">
+      <view class="sheet-header">
+        <view class="back-btn" bindtap="selectType" data-type=""><text class="back-arrow">←</text></view>
+        <text class="sheet-title">{{formType === 'in' ? '📥 入库' : formType === 'prod' ? '⚙️ 生产' : '📤 出货'}}</text>
+        <view class="close-btn" bindtap="closeForm">✕</view>
+      </view>
+      <view class="form-meta">
+        <view class="meta-item">
+          <text class="meta-label">鞋款</text>
+          <picker range="{{models}}" range-key="name" value="{{modelIdx}}" bindchange="onModelChange">
+            <view class="meta-val">{{models[modelIdx].name || '请选择'}}</view>
           </picker>
         </view>
-      </view>
-      <view class="form-group">
-        <text class="form-label">日期</text>
-        <picker mode="date" value="{{date}}" bindchange="onDate">
-          <view class="picker-val">{{date}}</view>
-        </picker>
-      </view>
-    </view>
-    <view class="card">
-      <view class="card-title">各尺码数量</view>
-      <view class="size-grid">
-        <view class="sg-header"><text class="sg-h-num">尺码</text><text class="sg-h-qty">数量</text></view>
-        <view wx:for="{{sizes}}" wx:key="*this" class="sg-row">
-          <text class="sg-num">{{item}}</text>
-          <input class="sg-input" type="number" placeholder="0" data-size="{{item}}" bindinput="onInQty" />
+        <view class="meta-item">
+          <text class="meta-label">日期</text>
+          <view class="meta-val">{{dateStart}}</view>
         </view>
       </view>
-      <view class="btn-primary" style="margin-top:20rpx" bindtap="submitIn">确认入库</view>
-    </view>
-  </view>
-
-  <!-- 生产 -->
-  <view wx:if="{{tab === 'prod'}}">
-    <view class="card">
-      <view class="form-group">
-        <text class="form-label">鞋款</text>
-        <picker range="{{models}}" range-key="name" value="{{prodModelIdx}}" bindchange="onProdModel">
-          <view class="picker-val">{{prodModelIdx >= 0 ? models[prodModelIdx].name : '选择鞋款'}}</view>
-        </picker>
-      </view>
-      <view class="form-group">
-        <text class="form-label">日期</text>
-        <picker mode="date" value="{{date}}" bindchange="onDate">
-          <view class="picker-val">{{date}}</view>
-        </picker>
-      </view>
-    </view>
-    <view class="card">
-      <view class="card-title">各尺码产量</view>
-      <view class="size-grid">
-        <view class="sg-header">
-          <text class="sg-h-num">尺码</text>
-          <text class="sg-h-stock">中底</text>
-          <text class="sg-h-stock">大底</text>
-          <text class="sg-h-qty">完成</text>
-          <text class="sg-h-qty">不良</text>
+      <scroll-view scroll-y class="form-scroll">
+        <view wx:if="{{formType === 'in'}}" class="size-grid-3">
+          <view wx:for="{{formRows}}" wx:key="eurSize" class="size-cell-3 dual-cell">
+            <text class="f-size-num">{{item.cnSize}}</text>
+            <view class="dual-inputs">
+              <input class="si si-md" type="number" placeholder="0" value="{{item.md}}" data-idx="{{index}}" bindinput="onFormMd" />
+              <input class="si si-rb" type="number" placeholder="0" value="{{item.rb}}" data-idx="{{index}}" bindinput="onFormRb" />
+            </view>
+            <view class="dual-labels">
+              <text class="dl c-blue">MD</text><text class="dl c-green">RB</text>
+            </view>
+          </view>
         </view>
-        <view wx:for="{{prodRows}}" wx:key="size" class="sg-row">
-          <text class="sg-num">{{item.size}}</text>
-          <text class="sg-stock {{item.mid > 0 ? 'c-blue' : ''}}">{{item.mid || '-'}}</text>
-          <text class="sg-stock {{item.out > 0 ? 'c-green' : ''}}">{{item.out || '-'}}</text>
-          <input class="sg-input" type="number" placeholder="0" data-size="{{item.size}}" bindinput="onProdQty" />
-          <input class="sg-input sg-def" type="number" placeholder="0" data-size="{{item.size}}" bindinput="onProdDef" />
+        <view wx:if="{{formType === 'prod'}}" class="size-grid-3">
+          <view wx:for="{{formRows}}" wx:key="eurSize" class="size-cell-3 dual-cell">
+            <text class="f-size-num">{{item.cnSize}}</text>
+            <view class="stock-ref">
+              <text class="sr c-blue">M{{item.mid}}</text><text class="sr c-green">R{{item.out}}</text>
+            </view>
+            <view class="dual-inputs">
+              <input class="si si-main" type="number" placeholder="0" value="{{item.qty}}" data-idx="{{index}}" bindinput="onFormQty" />
+              <input class="si si-def" type="number" placeholder="0" value="{{item.def}}" data-idx="{{index}}" bindinput="onFormDef" />
+            </view>
+            <view class="dual-labels">
+              <text class="dl">完成</text><text class="dl c-red">不良</text>
+            </view>
+          </view>
         </view>
-      </view>
-      <view class="btn-primary" style="margin-top:20rpx" bindtap="submitProd">确认生产</view>
-    </view>
-  </view>
-
-  <!-- 出货 -->
-  <view wx:if="{{tab === 'out'}}">
-    <view class="card">
-      <view class="form-group">
-        <text class="form-label">鞋款</text>
-        <picker range="{{models}}" range-key="name" value="{{outModelIdx}}" bindchange="onOutModel">
-          <view class="picker-val">{{outModelIdx >= 0 ? models[outModelIdx].name : '选择鞋款'}}</view>
-        </picker>
-      </view>
-      <view class="form-group">
-        <text class="form-label">日期</text>
-        <picker mode="date" value="{{date}}" bindchange="onDate">
-          <view class="picker-val">{{date}}</view>
-        </picker>
-      </view>
-    </view>
-    <view class="card">
-      <view class="card-title">各尺码出货量</view>
-      <view class="size-grid">
-        <view class="sg-header">
-          <text class="sg-h-num">尺码</text>
-          <text class="sg-h-stock">库存</text>
-          <text class="sg-h-qty">出货</text>
+        <view wx:if="{{formType === 'out'}}" class="size-grid-3">
+          <view wx:for="{{formRows}}" wx:key="eurSize" class="size-cell-3">
+            <text class="f-size-num">{{item.cnSize}}</text>
+            <text class="stock-ref-text" wx:if="{{item.stock > 0}}">存{{item.stock}}</text>
+            <text class="stock-ref-text" wx:else>-</text>
+            <input class="si" type="number" placeholder="0" value="{{item.outQty}}" data-idx="{{index}}" bindinput="onFormOut" />
+          </view>
         </view>
-        <view wx:for="{{outRows}}" wx:key="size" class="sg-row">
-          <text class="sg-num">{{item.size}}</text>
-          <text class="sg-stock {{item.qty > 0 ? 'c-purple' : ''}}">{{item.qty || '-'}}</text>
-          <input class="sg-input" type="number" placeholder="0" data-size="{{item.size}}" bindinput="onOutQty" />
+      </scroll-view>
+      <view class="form-footer">
+        <view class="sum-info">
+          <text class="sum-count">已填 {{summary.count}} 格</text>
+          <text class="sum-total">共 {{summary.total}} 双</text>
         </view>
+        <view class="sum-btn {{summary.count > 0 ? '' : 'disabled'}}" bindtap="submitForm">确认</view>
       </view>
-      <view class="btn-primary" style="margin-top:20rpx" bindtap="submitOut">确认出货</view>
-    </view>
-  </view>
-
-  <!-- Recent -->
-  <view class="card" style="margin-top:12rpx">
-    <view class="card-title">最近记录</view>
-    <view wx:if="{{recent.length === 0}}" class="empty">暂无记录</view>
-    <view wx:for="{{recent}}" wx:key="id" class="rec-item {{item.status === 'voided' ? 'voided' : ''}}">
-      <view class="ri-left">
-        <text class="ri-type {{item.typeClass}}">{{item.typeText}}</text>
-        <text wx:if="{{item.shoe_model}}" class="ri-model">{{item.shoe_model}}</text>
-        <text wx:if="{{item.shoe_size}}" class="ri-size">{{item.shoe_size}}码</text>
-        <text wx:if="{{item.status === 'voided'}}" class="ri-void">已撤销</text>
-      </view>
-      <text class="ri-qty {{item.status === 'voided' ? 'qty-void' : ''}}">{{item.displayQty}}</text>
-      <text class="ri-date">{{item.date}}</text>
-      <view wx:if="{{item.status === 'active'}}" class="btn-void" catchtap="voidRecord" data-type="{{item._type}}" data-id="{{item.id}}">撤销</view>
     </view>
   </view>
 </view>

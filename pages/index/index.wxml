@@ -1,89 +1,107 @@
 <view class="container">
-  <!-- 5 Key Metrics -->
+  <view class="section-label">📊 今日运营</view>
   <view class="metrics">
     <view class="metric-card">
-      <view class="metric-icon">📥</view>
-      <view class="metric-val">{{dashboard.today_in}}</view>
-      <view class="metric-label">今日原料入库</view>
+      <view class="mc-header mc-blue">📥 入库</view>
+      <view class="metric-val">{{d.today_in}}</view>
+      <view class="metric-detail">
+        <text class="md-item"><text class="dot dot-blue"></text>MD {{d.today_in_mid}}</text>
+        <text class="md-item"><text class="dot dot-green"></text>RB {{d.today_in_out}}</text>
+      </view>
     </view>
     <view class="metric-card">
-      <view class="metric-icon">📦</view>
-      <view class="metric-val">{{dashboard.stock_raw}}</view>
-      <view class="metric-label">原料库存</view>
+      <view class="mc-header mc-purple">⚙️ 生产</view>
+      <view class="metric-val">{{d.today_production}}</view>
+      <view class="metric-detail" wx:if="{{d.today_defects > 0}}">
+        <text class="md-item md-warn">不良 {{d.today_defects}}</text>
+      </view>
     </view>
     <view class="metric-card">
-      <view class="metric-icon">🏭</view>
-      <view class="metric-val">{{dashboard.today_produce}}</view>
-      <view class="metric-label">今日生产</view>
-    </view>
-    <view class="metric-card">
-      <view class="metric-icon">👟</view>
-      <view class="metric-val">{{dashboard.stock_product}}</view>
-      <view class="metric-label">成品库存</view>
-    </view>
-    <view class="metric-card">
-      <view class="metric-icon">🚚</view>
-      <view class="metric-val">{{dashboard.today_out}}</view>
-      <view class="metric-label">今日出货</view>
+      <view class="mc-header mc-orange">📤 出货</view>
+      <view class="metric-val">{{d.today_shipment}}</view>
     </view>
   </view>
 
-  <!-- Shoe Model Detail -->
-  <view wx:if="{{models.length === 0}}" class="card">
-    <view class="empty">暂无库存数据</view>
+  <!-- 当前库存 -->
+  <view class="section-label">📈 当前库存</view>
+  <view class="metrics">
+    <view class="metric-card">
+      <view class="mc-header mc-blue">🧱 MD</view>
+      <view class="metric-val">{{d.stock_mid}}</view>
+    </view>
+    <view class="metric-card">
+      <view class="mc-header mc-green">👟 RB</view>
+      <view class="metric-val">{{d.stock_out}}</view>
+    </view>
+    <view class="metric-card">
+      <view class="mc-header mc-purple">📦 成品</view>
+      <view class="metric-val">{{d.stock_product}}</view>
+    </view>
   </view>
 
-  <view wx:for="{{models}}" wx:key="name" class="card">
-    <view class="card-title">
-      {{item.name}}
-      <text class="total-tag">总计 中{{item.midTotal}} 大{{item.outTotal}} 成{{item.prodTotal}}</text>
-    </view>
-
-    <view wx:if="{{item.midsole.length > 0}}" class="inv-section">
-      <text class="inv-label c-blue">中底</text>
-      <view class="size-grid">
-        <view wx:for="{{item.midsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
-          <text class="sc-size">{{sz.size}}</text>
-          <text class="sc-qty">{{sz.qty}}</text>
-        </view>
+  <!-- 入库明细 -->
+  <view wx:if="{{d.inDetail.length > 0}}" class="card">
+    <view class="card-title">📥 入库明细</view>
+    <view class="data-table">
+      <view class="dt-header">
+        <text class="dt-col dt-name">鞋款</text>
+        <text class="dt-col dt-num">MD</text>
+        <text class="dt-col dt-num">RB</text>
+        <text class="dt-col dt-num">合计</text>
+      </view>
+      <view wx:for="{{d.inDetail}}" wx:key="name" class="dt-row">
+        <text class="dt-col dt-name">{{item.name}}</text>
+        <text class="dt-col dt-num {{item.mid > 0 ? 'c-blue' : ''}}">{{item.mid || '-'}}</text>
+        <text class="dt-col dt-num {{item.out > 0 ? 'c-green' : ''}}">{{item.out || '-'}}</text>
+        <text class="dt-col dt-num dt-bold">{{item.mid + item.out}}</text>
       </view>
     </view>
-
-    <view wx:if="{{item.outsole.length > 0}}" class="inv-section">
-      <text class="inv-label c-green">大底</text>
-      <view class="size-grid">
-        <view wx:for="{{item.outsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
-          <text class="sc-size">{{sz.size}}</text>
-          <text class="sc-qty">{{sz.qty}}</text>
-        </view>
-      </view>
-    </view>
-
-    <view wx:if="{{item.product.length > 0}}" class="inv-section">
-      <text class="inv-label c-purple">成品</text>
-      <view class="size-grid">
-        <view wx:for="{{item.product}}" wx:for-item="sz" wx:key="size" class="size-cell">
-          <text class="sc-size">{{sz.size}}</text>
-          <text class="sc-qty">{{sz.qty}}</text>
-        </view>
-      </view>
-    </view>
-
-    <view wx:if="{{item.midsole.length === 0 && item.outsole.length === 0 && item.product.length === 0}}" class="empty-sm">暂无库存</view>
   </view>
 
-  <!-- Recent -->
-  <view class="card">
-    <view class="card-title">最近操作</view>
-    <view wx:if="{{recent.length === 0}}" class="empty">暂无记录</view>
-    <view wx:for="{{recent}}" wx:key="id" class="rec-item">
-      <view class="ri-left">
-        <text class="ri-type {{item.typeClass}}">{{item.typeText}}</text>
-        <text wx:if="{{item.shoe_model}}" class="ri-model">{{item.shoe_model}}</text>
-        <text wx:if="{{item.shoe_size}}" class="ri-size">{{item.shoe_size}}码</text>
+  <!-- 生产明细 -->
+  <view wx:if="{{d.prodDetail.length > 0}}" class="card">
+    <view class="card-title">⚙️ 生产明细</view>
+    <view class="data-table">
+      <view class="dt-header">
+        <text class="dt-col dt-name">鞋款</text>
+        <text class="dt-col dt-num">完成</text>
+        <text class="dt-col dt-num">不良</text>
       </view>
-      <text class="ri-qty">{{item.displayQty}}</text>
-      <text class="ri-date">{{item.date}}</text>
+      <view wx:for="{{d.prodDetail}}" wx:key="name" class="dt-row">
+        <text class="dt-col dt-name">{{item.name}}</text>
+        <text class="dt-col dt-num dt-bold">{{item.qty}}</text>
+        <text class="dt-col dt-num {{item.def > 0 ? 'c-red' : ''}}">{{item.def || '-'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 出货明细 -->
+  <view wx:if="{{d.outDetail.length > 0}}" class="card">
+    <view class="card-title">📤 出货明细</view>
+    <view class="data-table">
+      <view class="dt-header">
+        <text class="dt-col dt-name">鞋款</text>
+        <text class="dt-col dt-num">数量</text>
+      </view>
+      <view wx:for="{{d.outDetail}}" wx:key="name" class="dt-row">
+        <text class="dt-col dt-name">{{item.name}}</text>
+        <text class="dt-col dt-num dt-bold">{{item.qty}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 成品库存 -->
+  <view wx:if="{{d.prodStock.length > 0}}" class="card">
+    <view class="card-title">📦 成品库存</view>
+    <view class="data-table">
+      <view class="dt-header">
+        <text class="dt-col dt-name">鞋款</text>
+        <text class="dt-col dt-num">库存</text>
+      </view>
+      <view wx:for="{{d.prodStock}}" wx:key="name" class="dt-row">
+        <text class="dt-col dt-name">{{item.name}}</text>
+        <text class="dt-col dt-num dt-bold">{{item.qty}}</text>
+      </view>
     </view>
   </view>
 </view>

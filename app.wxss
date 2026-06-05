@@ -3,6 +3,7 @@ page {
   color: #333333;
   font-family: -apple-system, system-ui, sans-serif;
   font-size: 28rpx;
+  box-sizing: border-box;
 }
 .card {
   background: #ffffff;
@@ -10,6 +11,8 @@ page {
   padding: 28rpx;
   margin-bottom: 20rpx;
   box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 .btn-primary {
   background: #1890ff;

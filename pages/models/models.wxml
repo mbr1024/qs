@@ -1,0 +1,50 @@
+<view class="container">
+  <!-- Add Button -->
+  <view class="add-btn" bindtap="showAdd">
+    <text>+ 添加鞋款</text>
+  </view>
+
+  <!-- Add Form (hidden by default) -->
+  <view wx:if="{{showAddForm}}" class="card add-card">
+    <view class="form-group">
+      <text class="form-label">鞋款名称</text>
+      <input class="form-input" placeholder="输入鞋款名称" value="{{newName}}" bindinput="onNewName" focus="{{showAddForm}}" />
+    </view>
+    <view class="form-btns">
+      <view class="btn-cancel" bindtap="hideAdd">取消</view>
+      <view class="btn-confirm" bindtap="addModel">确定</view>
+    </view>
+  </view>
+
+  <!-- Model List -->
+  <view wx:if="{{models.length === 0}}" class="empty">暂无鞋款</view>
+
+  <!-- Active Models -->
+  <view wx:for="{{models}}" wx:key="id">
+    <view wx:if="{{!item.disabled}}" class="model-card">
+      <view class="model-info">
+        <view wx:if="{{editingId !== item.id}}" class="model-name">{{item.name}}</view>
+        <input wx:else class="edit-input" value="{{item.name}}" bindinput="onEditName" bindblur="saveEdit" bindconfirm="saveEdit" focus="{{editingId === item.id}}" />
+      </view>
+      <view class="model-actions">
+        <view class="btn-edit" catchtap="startEdit" data-id="{{item.id}}" data-name="{{item.name}}">编辑</view>
+        <view class="btn-disable" catchtap="disableModel" data-id="{{item.id}}">禁用</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Disabled Models -->
+  <view wx:if="{{hasDisabled}}" class="section-divider">
+    <text class="divider-text">已禁用</text>
+  </view>
+  <view wx:for="{{models}}" wx:key="id">
+    <view wx:if="{{item.disabled}}" class="model-card disabled">
+      <view class="model-info">
+        <view class="model-name disabled-text">{{item.name}}</view>
+      </view>
+      <view class="model-actions">
+        <view class="btn-enable" catchtap="enableModel" data-id="{{item.id}}">启用</view>
+      </view>
+    </view>
+  </view>
+</view>

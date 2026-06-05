@@ -1,0 +1,81 @@
+<view class="container">
+  <!-- 筛选栏 -->
+  <view class="filter-bar">
+    <view class="sub-tabs">
+      <view class="sub-tab {{tab === 'in' ? 'active' : ''}}" bindtap="switchTab" data-tab="in">📥 入库</view>
+      <view class="sub-tab {{tab === 'prod' ? 'active' : ''}}" bindtap="switchTab" data-tab="prod">⚙️ 生产</view>
+      <view class="sub-tab {{tab === 'out' ? 'active' : ''}}" bindtap="switchTab" data-tab="out">📤 出货</view>
+    </view>
+    <view class="date-filter">
+      <picker mode="date" value="{{startDate}}" bindchange="onStartDate">
+        <view class="date-btn">{{startDate || '开始日期'}}</view>
+      </picker>
+      <text class="date-sep">至</text>
+      <picker mode="date" value="{{endDate}}" bindchange="onEndDate">
+        <view class="date-btn">{{endDate || '结束日期'}}</view>
+      </picker>
+    </view>
+    <view class="quick-dates">
+      <view class="qd-btn {{dateRange === 'today' ? 'active' : ''}}" bindtap="setToday">今日</view>
+      <view class="qd-btn {{dateRange === 'month' ? 'active' : ''}}" bindtap="setThisMonth">本月</view>
+      <view class="qd-btn {{dateRange === 'lastMonth' ? 'active' : ''}}" bindtap="setLastMonth">上月</view>
+      <view class="qd-btn {{dateRange === 'year' ? 'active' : ''}}" bindtap="setThisYear">本年</view>
+    </view>
+  </view>
+
+  <!-- 记录列表 -->
+  <view wx:if="{{dateGroups.length === 0}}" class="empty">暂无记录</view>
+  <view wx:for="{{dateGroups}}" wx:key="date">
+    <view class="day-header">
+      <text class="day-date">{{item.date}}</text>
+      <text class="day-total">共{{item.dayTotal}}双</text>
+    </view>
+    <view wx:for="{{item.models}}" wx:for-item="model" wx:key="name" class="card">
+      <view class="card-title">👟 {{model.name}}</view>
+      <view wx:if="{{tab === 'in'}}" class="total-bar">
+        <text class="tb-item c-blue">MD {{model.midTotal}}</text>
+        <text class="tb-item c-green">RB {{model.outTotal}}</text>
+        <text class="tb-item">合计 {{model.total}}</text>
+      </view>
+      <view wx:else class="total-bar">
+        <text class="tb-item">合计 {{model.total}}</text>
+      </view>
+      <!-- 入库: MD/RB 分开 -->
+      <view wx:if="{{tab === 'in'}}">
+        <view wx:if="{{model.midsole.length > 0}}" class="inv-section">
+          <text class="inv-label c-blue">MD</text>
+          <view class="size-grid">
+            <view wx:for="{{model.midsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
+              <text class="sc-size">{{sz.size}}</text>
+              <text class="sc-qty">{{sz.qty}}</text>
+            </view>
+          </view>
+        </view>
+        <view wx:if="{{model.outsole.length > 0}}" class="inv-section">
+          <text class="inv-label c-green">RB</text>
+          <view class="size-grid">
+            <view wx:for="{{model.outsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
+              <text class="sc-size">{{sz.size}}</text>
+              <text class="sc-qty c-green">{{sz.qty}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <!-- 生产 -->
+      <view wx:if="{{tab === 'prod'}}" class="size-grid">
+        <view wx:for="{{model.sizes}}" wx:for-item="sz" wx:key="size" class="size-cell">
+          <text class="sc-size">{{sz.size}}</text>
+          <text class="sc-qty">{{sz.qty}}</text>
+          <text wx:if="{{sz.def > 0}}" class="sc-def">不良{{sz.def}}</text>
+        </view>
+      </view>
+      <!-- 出货 -->
+      <view wx:if="{{tab === 'out'}}" class="size-grid">
+        <view wx:for="{{model.sizes}}" wx:for-item="sz" wx:key="size" class="size-cell">
+          <text class="sc-size">{{sz.size}}</text>
+          <text class="sc-qty">{{sz.qty}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

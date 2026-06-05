@@ -22,5 +22,7 @@ function today() {
 
 function fmtNum(n) { return n == null ? '0' : Number(n).toLocaleString(); }
 function fmtPrice(n) { return n == null ? '0.00' : Number(n).toFixed(2); }
+// 欧码转中码: 35->225, 42->260
+function cnSize(eur) { return (eur + 10) * 5; }
 
-module.exports = { api: api, today: today, fmtNum: fmtNum, fmtPrice: fmtPrice };
+module.exports = { api: api, today: today, fmtNum: fmtNum, fmtPrice: fmtPrice, cnSize: cnSize };
