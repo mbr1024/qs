@@ -40,9 +40,9 @@
   </view>
 
   <!-- 入库明细 -->
-  <view wx:if="{{d.inDetail.length > 0}}" class="card">
+  <view class="card">
     <view class="card-title">📥 入库明细</view>
-    <view class="data-table">
+    <view wx:if="{{d.inDetail.length > 0}}" class="data-table">
       <view class="dt-header">
         <text class="dt-col dt-name">鞋款</text>
         <text class="dt-col dt-num">MD</text>
@@ -56,12 +56,13 @@
         <text class="dt-col dt-num dt-bold">{{item.mid + item.out}}</text>
       </view>
     </view>
+    <view wx:else class="empty-sm">今日暂无入库</view>
   </view>
 
   <!-- 生产明细 -->
-  <view wx:if="{{d.prodDetail.length > 0}}" class="card">
+  <view class="card">
     <view class="card-title">⚙️ 生产明细</view>
-    <view class="data-table">
+    <view wx:if="{{d.prodDetail.length > 0}}" class="data-table">
       <view class="dt-header">
         <text class="dt-col dt-name">鞋款</text>
         <text class="dt-col dt-num">完成</text>
@@ -73,12 +74,13 @@
         <text class="dt-col dt-num {{item.def > 0 ? 'c-red' : ''}}">{{item.def || '-'}}</text>
       </view>
     </view>
+    <view wx:else class="empty-sm">今日暂无生产</view>
   </view>
 
   <!-- 出货明细 -->
-  <view wx:if="{{d.outDetail.length > 0}}" class="card">
+  <view class="card">
     <view class="card-title">📤 出货明细</view>
-    <view class="data-table">
+    <view wx:if="{{d.outDetail.length > 0}}" class="data-table">
       <view class="dt-header">
         <text class="dt-col dt-name">鞋款</text>
         <text class="dt-col dt-num">数量</text>
@@ -88,12 +90,13 @@
         <text class="dt-col dt-num dt-bold">{{item.qty}}</text>
       </view>
     </view>
+    <view wx:else class="empty-sm">今日暂无出货</view>
   </view>
 
   <!-- 成品库存 -->
-  <view wx:if="{{d.prodStock.length > 0}}" class="card">
+  <view class="card">
     <view class="card-title">📦 成品库存</view>
-    <view class="data-table">
+    <view wx:if="{{d.prodStock.length > 0}}" class="data-table">
       <view class="dt-header">
         <text class="dt-col dt-name">鞋款</text>
         <text class="dt-col dt-num">库存</text>
@@ -103,5 +106,6 @@
         <text class="dt-col dt-num dt-bold">{{item.qty}}</text>
       </view>
     </view>
+    <view wx:else class="empty-sm">暂无成品库存</view>
   </view>
 </view>

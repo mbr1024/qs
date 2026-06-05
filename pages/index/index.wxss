@@ -58,3 +58,5 @@
 .c-blue { color: #1890ff; }
 .c-green { color: #52c41a; }
 .c-red { color: #ff4d4f; }
+
+.empty-sm { text-align: center; padding: 24rpx 0; color: #ccc; font-size: 24rpx; }
