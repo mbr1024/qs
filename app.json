@@ -1,0 +1,25 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/record/record",
+    "pages/inventory/inventory"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "鞋厂进销存",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#1890ff",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {"pagePath": "pages/index/index", "text": "首页", "iconPath": "static/home.png", "selectedIconPath": "static/home-active.png"},
+      {"pagePath": "pages/record/record", "text": "记录", "iconPath": "static/rec.png", "selectedIconPath": "static/rec-active.png"},
+      {"pagePath": "pages/inventory/inventory", "text": "库存", "iconPath": "static/inv.png", "selectedIconPath": "static/inv-active.png"}
+    ]
+  }
+}

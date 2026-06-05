@@ -1,0 +1,56 @@
+page {
+  background: #f5f5f5;
+  color: #333333;
+  font-family: -apple-system, system-ui, sans-serif;
+  font-size: 28rpx;
+}
+.card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
+}
+.btn-primary {
+  background: #1890ff;
+  color: #ffffff;
+  border-radius: 12rpx;
+  font-weight: 600;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  font-size: 30rpx;
+}
+.btn-danger {
+  background: #ff4d4f;
+  color: #fff;
+  border-radius: 8rpx;
+  font-size: 24rpx;
+  padding: 8rpx 20rpx;
+  display: inline-block;
+}
+.tag {
+  display: inline-block;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+  margin-right: 8rpx;
+}
+.tag-midsole { background: #e6f7ff; color: #1890ff; }
+.tag-outsole { background: #f6ffed; color: #52c41a; }
+.tag-defect { background: #fff2f0; color: #ff4d4f; }
+.section-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  margin-bottom: 20rpx;
+  padding-bottom: 12rpx;
+  border-bottom: 1rpx solid #eeeeee;
+  color: #333333;
+}
+.empty {
+  text-align: center;
+  padding: 60rpx 0;
+  color: #999999;
+  font-size: 26rpx;
+}

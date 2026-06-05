@@ -1,0 +1,58 @@
+<view class="container">
+  <view class="section-title">🏭 生产（贴合）</view>
+  <view class="card">
+    <view class="form-row">
+      <view class="form-group">
+        <text class="form-label">鞋款型号</text>
+        <input class="form-input" placeholder="输入鞋款" value="{{model}}" bindinput="onModelInput" bindconfirm="loadModelStock" />
+      </view>
+      <view class="form-group">
+        <text class="form-label">日期</text>
+        <picker mode="date" value="{{date}}" bindchange="onDateChange">
+          <view class="picker-val">{{date}}</view>
+        </picker>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">各尺码产量（留空=不记录）</view>
+    <view class="size-grid">
+      <view class="size-header">
+        <text class="sh-num">尺码</text>
+        <text class="sh-stock">中底</text>
+        <text class="sh-stock">大底</text>
+        <text class="sh-input">完成</text>
+        <text class="sh-input">不良</text>
+      </view>
+      <view wx:for="{{rows}}" wx:key="size" class="size-row">
+        <text class="sr-num">{{item.size}}</text>
+        <text class="sr-stock {{item.mid > 0 ? 'has-cyan' : ''}}">{{item.mid || '-'}}</text>
+        <text class="sr-stock {{item.out > 0 ? 'has-green' : ''}}">{{item.out || '-'}}</text>
+        <input class="sr-input" type="number" placeholder="0" data-size="{{item.size}}" bindinput="onQtyInput" />
+        <input class="sr-input sr-defect" type="number" placeholder="0" data-size="{{item.size}}" bindinput="onDefInput" />
+      </view>
+    </view>
+    <view class="btn-primary" style="margin-top:20rpx" bindtap="submitBatch">批量记录</view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">生产记录</view>
+    <view wx:if="{{list.length === 0}}" class="empty">暂无生产记录</view>
+    <view wx:for="{{list}}" wx:key="id" class="record-item">
+      <view class="ri-left">
+        <view class="ri-main">
+          贴合
+          <text wx:if="{{item.shoe_model}}" class="tag tag-model">{{item.shoe_model}}</text>
+          <text wx:if="{{item.shoe_size}}" class="tag tag-size">{{item.shoe_size}}码</text>
+          <text wx:if="{{item.defects > 0}}" class="tag tag-defect">不良{{item.defects}}</text>
+        </view>
+        <view class="ri-sub">{{item.date}}</view>
+      </view>
+      <view class="ri-right">
+        <view class="ri-qty">{{item.completedText}}</view>
+        <view class="btn-danger" bindtap="onDelete" data-id="{{item.id}}">删</view>
+      </view>
+    </view>
+  </view>
+</view>

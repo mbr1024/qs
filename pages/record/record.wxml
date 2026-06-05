@@ -1,0 +1,135 @@
+<view class="container">
+  <view class="sub-tabs">
+    <view class="sub-tab {{tab === 'in' ? 'active' : ''}}" bindtap="switchTab" data-tab="in">📥 入库</view>
+    <view class="sub-tab {{tab === 'prod' ? 'active' : ''}}" bindtap="switchTab" data-tab="prod">🏭 生产</view>
+    <view class="sub-tab {{tab === 'out' ? 'active' : ''}}" bindtap="switchTab" data-tab="out">🚚 出货</view>
+  </view>
+
+  <!-- 入库 -->
+  <view wx:if="{{tab === 'in'}}">
+    <view class="card">
+      <view class="type-btns">
+        <view class="type-btn {{inType === 0 ? 'active' : ''}}" bindtap="onInType" data-idx="0">中底</view>
+        <view class="type-btn {{inType === 1 ? 'active' : ''}}" bindtap="onInType" data-idx="1">大底</view>
+      </view>
+      <view class="form-row">
+        <view class="form-group">
+          <text class="form-label">供应商</text>
+          <input class="form-input" placeholder="供应商" value="{{inSupplier}}" bindinput="onInSupplier" />
+        </view>
+        <view class="form-group">
+          <text class="form-label">鞋款</text>
+          <picker range="{{models}}" range-key="name" value="{{inModelIdx}}" bindchange="onInModel">
+            <view class="picker-val">{{inModelIdx >= 0 ? models[inModelIdx].name : '选择鞋款'}}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="form-group">
+        <text class="form-label">日期</text>
+        <picker mode="date" value="{{date}}" bindchange="onDate">
+          <view class="picker-val">{{date}}</view>
+        </picker>
+      </view>
+    </view>
+    <view class="card">
+      <view class="card-title">各尺码数量</view>
+      <view class="size-grid">
+        <view class="sg-header"><text class="sg-h-num">尺码</text><text class="sg-h-qty">数量</text></view>
+        <view wx:for="{{sizes}}" wx:key="*this" class="sg-row">
+          <text class="sg-num">{{item}}</text>
+          <input class="sg-input" type="number" placeholder="0" data-size="{{item}}" bindinput="onInQty" />
+        </view>
+      </view>
+      <view class="btn-primary" style="margin-top:20rpx" bindtap="submitIn">确认入库</view>
+    </view>
+  </view>
+
+  <!-- 生产 -->
+  <view wx:if="{{tab === 'prod'}}">
+    <view class="card">
+      <view class="form-group">
+        <text class="form-label">鞋款</text>
+        <picker range="{{models}}" range-key="name" value="{{prodModelIdx}}" bindchange="onProdModel">
+          <view class="picker-val">{{prodModelIdx >= 0 ? models[prodModelIdx].name : '选择鞋款'}}</view>
+        </picker>
+      </view>
+      <view class="form-group">
+        <text class="form-label">日期</text>
+        <picker mode="date" value="{{date}}" bindchange="onDate">
+          <view class="picker-val">{{date}}</view>
+        </picker>
+      </view>
+    </view>
+    <view class="card">
+      <view class="card-title">各尺码产量</view>
+      <view class="size-grid">
+        <view class="sg-header">
+          <text class="sg-h-num">尺码</text>
+          <text class="sg-h-stock">中底</text>
+          <text class="sg-h-stock">大底</text>
+          <text class="sg-h-qty">完成</text>
+          <text class="sg-h-qty">不良</text>
+        </view>
+        <view wx:for="{{prodRows}}" wx:key="size" class="sg-row">
+          <text class="sg-num">{{item.size}}</text>
+          <text class="sg-stock {{item.mid > 0 ? 'c-blue' : ''}}">{{item.mid || '-'}}</text>
+          <text class="sg-stock {{item.out > 0 ? 'c-green' : ''}}">{{item.out || '-'}}</text>
+          <input class="sg-input" type="number" placeholder="0" data-size="{{item.size}}" bindinput="onProdQty" />
+          <input class="sg-input sg-def" type="number" placeholder="0" data-size="{{item.size}}" bindinput="onProdDef" />
+        </view>
+      </view>
+      <view class="btn-primary" style="margin-top:20rpx" bindtap="submitProd">确认生产</view>
+    </view>
+  </view>
+
+  <!-- 出货 -->
+  <view wx:if="{{tab === 'out'}}">
+    <view class="card">
+      <view class="form-group">
+        <text class="form-label">鞋款</text>
+        <picker range="{{models}}" range-key="name" value="{{outModelIdx}}" bindchange="onOutModel">
+          <view class="picker-val">{{outModelIdx >= 0 ? models[outModelIdx].name : '选择鞋款'}}</view>
+        </picker>
+      </view>
+      <view class="form-group">
+        <text class="form-label">日期</text>
+        <picker mode="date" value="{{date}}" bindchange="onDate">
+          <view class="picker-val">{{date}}</view>
+        </picker>
+      </view>
+    </view>
+    <view class="card">
+      <view class="card-title">各尺码出货量</view>
+      <view class="size-grid">
+        <view class="sg-header">
+          <text class="sg-h-num">尺码</text>
+          <text class="sg-h-stock">库存</text>
+          <text class="sg-h-qty">出货</text>
+        </view>
+        <view wx:for="{{outRows}}" wx:key="size" class="sg-row">
+          <text class="sg-num">{{item.size}}</text>
+          <text class="sg-stock {{item.qty > 0 ? 'c-purple' : ''}}">{{item.qty || '-'}}</text>
+          <input class="sg-input" type="number" placeholder="0" data-size="{{item.size}}" bindinput="onOutQty" />
+        </view>
+      </view>
+      <view class="btn-primary" style="margin-top:20rpx" bindtap="submitOut">确认出货</view>
+    </view>
+  </view>
+
+  <!-- Recent -->
+  <view class="card" style="margin-top:12rpx">
+    <view class="card-title">最近记录</view>
+    <view wx:if="{{recent.length === 0}}" class="empty">暂无记录</view>
+    <view wx:for="{{recent}}" wx:key="id" class="rec-item {{item.status === 'voided' ? 'voided' : ''}}">
+      <view class="ri-left">
+        <text class="ri-type {{item.typeClass}}">{{item.typeText}}</text>
+        <text wx:if="{{item.shoe_model}}" class="ri-model">{{item.shoe_model}}</text>
+        <text wx:if="{{item.shoe_size}}" class="ri-size">{{item.shoe_size}}码</text>
+        <text wx:if="{{item.status === 'voided'}}" class="ri-void">已撤销</text>
+      </view>
+      <text class="ri-qty {{item.status === 'voided' ? 'qty-void' : ''}}">{{item.displayQty}}</text>
+      <text class="ri-date">{{item.date}}</text>
+      <view wx:if="{{item.status === 'active'}}" class="btn-void" catchtap="voidRecord" data-type="{{item._type}}" data-id="{{item.id}}">撤销</view>
+    </view>
+  </view>
+</view>

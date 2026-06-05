@@ -1,0 +1,89 @@
+<view class="container">
+  <!-- 5 Key Metrics -->
+  <view class="metrics">
+    <view class="metric-card">
+      <view class="metric-icon">📥</view>
+      <view class="metric-val">{{dashboard.today_in}}</view>
+      <view class="metric-label">今日原料入库</view>
+    </view>
+    <view class="metric-card">
+      <view class="metric-icon">📦</view>
+      <view class="metric-val">{{dashboard.stock_raw}}</view>
+      <view class="metric-label">原料库存</view>
+    </view>
+    <view class="metric-card">
+      <view class="metric-icon">🏭</view>
+      <view class="metric-val">{{dashboard.today_produce}}</view>
+      <view class="metric-label">今日生产</view>
+    </view>
+    <view class="metric-card">
+      <view class="metric-icon">👟</view>
+      <view class="metric-val">{{dashboard.stock_product}}</view>
+      <view class="metric-label">成品库存</view>
+    </view>
+    <view class="metric-card">
+      <view class="metric-icon">🚚</view>
+      <view class="metric-val">{{dashboard.today_out}}</view>
+      <view class="metric-label">今日出货</view>
+    </view>
+  </view>
+
+  <!-- Shoe Model Detail -->
+  <view wx:if="{{models.length === 0}}" class="card">
+    <view class="empty">暂无库存数据</view>
+  </view>
+
+  <view wx:for="{{models}}" wx:key="name" class="card">
+    <view class="card-title">
+      {{item.name}}
+      <text class="total-tag">总计 中{{item.midTotal}} 大{{item.outTotal}} 成{{item.prodTotal}}</text>
+    </view>
+
+    <view wx:if="{{item.midsole.length > 0}}" class="inv-section">
+      <text class="inv-label c-blue">中底</text>
+      <view class="size-grid">
+        <view wx:for="{{item.midsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
+          <text class="sc-size">{{sz.size}}</text>
+          <text class="sc-qty">{{sz.qty}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{item.outsole.length > 0}}" class="inv-section">
+      <text class="inv-label c-green">大底</text>
+      <view class="size-grid">
+        <view wx:for="{{item.outsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
+          <text class="sc-size">{{sz.size}}</text>
+          <text class="sc-qty">{{sz.qty}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{item.product.length > 0}}" class="inv-section">
+      <text class="inv-label c-purple">成品</text>
+      <view class="size-grid">
+        <view wx:for="{{item.product}}" wx:for-item="sz" wx:key="size" class="size-cell">
+          <text class="sc-size">{{sz.size}}</text>
+          <text class="sc-qty">{{sz.qty}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{item.midsole.length === 0 && item.outsole.length === 0 && item.product.length === 0}}" class="empty-sm">暂无库存</view>
+  </view>
+
+  <!-- Recent -->
+  <view class="card">
+    <view class="card-title">最近操作</view>
+    <view wx:if="{{recent.length === 0}}" class="empty">暂无记录</view>
+    <view wx:for="{{recent}}" wx:key="id" class="rec-item">
+      <view class="ri-left">
+        <text class="ri-type {{item.typeClass}}">{{item.typeText}}</text>
+        <text wx:if="{{item.shoe_model}}" class="ri-model">{{item.shoe_model}}</text>
+        <text wx:if="{{item.shoe_size}}" class="ri-size">{{item.shoe_size}}码</text>
+      </view>
+      <text class="ri-qty">{{item.displayQty}}</text>
+      <text class="ri-date">{{item.date}}</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,70 @@
+<view class="container">
+  <view class="sub-tabs">
+    <view class="sub-tab {{view === 'raw' ? 'active' : ''}}" bindtap="switchView" data-view="raw">📦 原料</view>
+    <view class="sub-tab {{view === 'product' ? 'active' : ''}}" bindtap="switchView" data-view="product">👟 成品</view>
+    <view class="sub-tab {{view === 'models' ? 'active' : ''}}" bindtap="switchView" data-view="models">⚙️ 鞋款</view>
+  </view>
+
+  <!-- 原料库存 -->
+  <view wx:if="{{view === 'raw'}}">
+    <view wx:if="{{list.length === 0}}" class="card"><view class="empty">暂无原料库存</view></view>
+    <view wx:for="{{list}}" wx:key="name" class="card">
+      <view class="card-title">{{item.name}}</view>
+      <view wx:if="{{item.midsole.length > 0}}" class="inv-section">
+        <text class="inv-label c-blue">中底</text>
+        <view class="size-grid">
+          <view wx:for="{{item.midsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
+            <text class="sc-size">{{sz.size}}</text>
+            <text class="sc-qty">{{sz.qty}}</text>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{item.outsole.length > 0}}" class="inv-section">
+        <text class="inv-label c-green">大底</text>
+        <view class="size-grid">
+          <view wx:for="{{item.outsole}}" wx:for-item="sz" wx:key="size" class="size-cell">
+            <text class="sc-size">{{sz.size}}</text>
+            <text class="sc-qty">{{sz.qty}}</text>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{item.midsole.length === 0 && item.outsole.length === 0}}" class="empty-sm">无原料库存</view>
+    </view>
+  </view>
+
+  <!-- 成品库存 -->
+  <view wx:if="{{view === 'product'}}">
+    <view wx:if="{{list.length === 0}}" class="card"><view class="empty">暂无成品库存</view></view>
+    <view wx:for="{{list}}" wx:key="name" class="card">
+      <view class="card-title">{{item.name}}</view>
+      <view wx:if="{{item.product.length > 0}}" class="inv-section">
+        <view class="size-grid">
+          <view wx:for="{{item.product}}" wx:for-item="sz" wx:key="size" class="size-cell">
+            <text class="sc-size">{{sz.size}}</text>
+            <text class="sc-qty">{{sz.qty}}</text>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="empty-sm">无成品库存</view>
+    </view>
+  </view>
+
+  <!-- 鞋款管理 -->
+  <view wx:if="{{view === 'models'}}">
+    <view class="card">
+      <view class="card-title">添加鞋款</view>
+      <view class="add-row">
+        <input class="form-input" placeholder="输入鞋款名称" value="{{newModel}}" bindinput="onNewModel" bindconfirm="addModel" />
+        <view class="btn-add" bindtap="addModel">添加</view>
+      </view>
+    </view>
+    <view class="card">
+      <view class="card-title">已有鞋款（{{models.length}}）</view>
+      <view wx:if="{{models.length === 0}}" class="empty">暂无鞋款，请先添加</view>
+      <view wx:for="{{models}}" wx:key="id" class="model-item">
+        <text class="model-name">{{item.name}}</text>
+        <view class="btn-del" bindtap="deleteModel" data-id="{{item.id}}" data-name="{{item.name}}">删除</view>
+      </view>
+    </view>
+  </view>
+</view>
