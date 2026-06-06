@@ -128,6 +128,7 @@
 .f-size-num { font-size: 22rpx; font-weight: 500; color: #bbb; background: #f0f0f0; padding: 2rpx 10rpx; border-radius: 4rpx; }
 .dual-cell { gap: 3rpx; }
 .dual-inputs { display: flex; gap: 4rpx; width: 100%; box-sizing: border-box; }
+.dual-inputs .si { width: auto; flex: 1; }
 .dual-labels { display: flex; gap: 4rpx; width: 100%; justify-content: center; }
 .dl { font-size: 18rpx; color: #bbb; width: 50%; text-align: center; }
 
